@@ -80,6 +80,8 @@ export default function MainHeader({ genres }) {
    const [selectedIndex, setSelectedIndex] = React.useState(-1);
    const navigate = useNavigate();
    const { logout } = useAuth();
+   let location = useLocation();
+   const submit = useSubmit();
    const open = Boolean(anchorElNav);
    const handleOpenNavMenu = (event) => {
       setAnchorElNav(event.currentTarget);
@@ -100,6 +102,7 @@ export default function MainHeader({ genres }) {
       setAnchorElNav(null);
       navigate(index === 0 ? '/tv-shows' : '/tv-shows');
    };
+
    const handleUserItemClick = (event, setting) => {
       const actions = new Map([
          ['Profile', () => navigate('profile')],
@@ -110,25 +113,29 @@ export default function MainHeader({ genres }) {
       let action = actions.get(setting) || '';
       action();
    };
+
    const handleNavigateGenre = (id) => {
       navigate(`/genre/${id}`);
    };
-   let location = useLocation();
-   const submit = useSubmit();
+
    React.useEffect(() => {
       document.getElementById('q').value = location.search.slice(3);
    }, [location]);
    React.useEffect(() => {
-      if (location.pathname) {
-         let indexOfPage = pages.findIndex(
-            (item) =>
-               item.trim().toLocaleLowerCase() == location.pathname.slice(1),
-         );
-         if (indexOfPage > -1) {
-            setSelectedIndex(indexOfPage);
-         }
+      if (location.pathname === '/tv-shows') {
+         // let indexOfPage = pages.findIndex(
+         //    (item) =>
+         //       item.trim().toLocaleLowerCase() == location.pathname.slice(1),
+         // );
+         // console.log(indexOfPage);
+         // if (indexOfPage > -1) {
+         setSelectedIndex(0);
+         // }
+      } else {
+         setSelectedIndex(false);
       }
-   }, []);
+   }, [location.pathname]);
+
    const debounce = React.useRef();
    return (
       <AppBar position='fixed' sx={{ opacity: 0.7, backgroundColor: 'black' }}>

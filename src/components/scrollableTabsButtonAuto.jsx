@@ -20,8 +20,10 @@ export default function ScrollableTabsButtonAuto({ data, handleNavigate }) {
          if (indexOfGenre > -1) {
             setValue(indexOfGenre);
          }
+      }else{
+         setValue(false)
       }
-   }, []);
+      }, [params.genreId]);
    return (
       <Tabs
          value={value}
