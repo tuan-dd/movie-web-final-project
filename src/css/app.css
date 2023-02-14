@@ -12,7 +12,11 @@ body,
    background: black;
 }
 
-.MuiTypography-root.MuiTypography-body1.css-1rjt11j {
+/* .MuiTypography-body1.css-1rjt11j {
+   color: white !important;
+} */
+
+.white {
    color: white !important;
 }
 

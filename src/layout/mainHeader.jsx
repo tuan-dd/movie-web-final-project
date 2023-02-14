@@ -132,11 +132,10 @@ export default function MainHeader({ genres }) {
          setSelectedIndex(0);
          // }
       } else {
-         setSelectedIndex(false);
+         setSelectedIndex(-1);
       }
    }, [location.pathname]);
 
-   const debounce = React.useRef();
    return (
       <AppBar position='fixed' sx={{ opacity: 0.7, backgroundColor: 'black' }}>
          <Container maxWidth='false'>
@@ -172,16 +171,18 @@ export default function MainHeader({ genres }) {
                               color: 'blue',
                               borderRadius: 2,
                            },
-                           '.css-h57675-MuiTypography-root': {
-                              color: 'white',
-                              filter: ' brightness(1.2)',
-                           },
                         }}
                         key={page}
                         onClick={(event) => handlePageItemClick(event, index)}
                         selected={index === selectedIndex}
                      >
-                        <Typography textAlign='center'>{page}</Typography>
+                        <Typography
+                           textAlign='center'
+                           color={(theme) => theme.palette.primary.contrastText}
+                           sx={{ filter: ' brightness(1.5)' }}
+                        >
+                           {page}
+                        </Typography>
                      </MenuItem>
                   ))}
                </Box>
@@ -198,6 +199,7 @@ export default function MainHeader({ genres }) {
                      sx={{ width: '120px', color: 'white' }}
                   >
                      <ListItemText
+                        color={(theme) => theme.palette.primary.contrastText}
                         component='Typography'
                         sx={{
                            '.css-6nwqjw-MuiTypography-root': {

@@ -28,7 +28,7 @@ function GenrePage() {
    const containerRef = useRef(0);
    const navigation = useNavigation();
    // addEventListener for "scroll" event
-   console.log(navigation.state);
+   // console.log(navigation.state);
    useEffect(() => {
       window.addEventListener('scroll', onScroll);
 
