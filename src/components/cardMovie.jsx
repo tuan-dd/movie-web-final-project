@@ -131,28 +131,28 @@ export default function CardMovie({
                      >
                         <CreateNewFolder />
                      </IconButton>
-                     <Form
+                     {/* <Form
                         role='search'
                         method='put'
-                        // action='/'
-                        // onClick={(event) => {
-                        //    submit(event.currentTarget.form);
-                        // }}
-                        // <Link
-                        // to={`detail/${card.id}`}
-                        // state={{ callBack: location }}
+                        action='/'
+                        onClick={(event) => {
+                           submit(event.currentTarget.form);
+                        }} */}
+                     <Link
+                        to={`detail/${card.id}`}
+                        state={{ callBack: location }}
                      >
                         <IconButton
                            size='sm'
                            color='neutral'
-                           type='submit'
-                           name='detail'
+                           // type='submit'
+                           // name='detail'
                            defaultValue={`${card.id}`}
                         >
                            <Info />
                         </IconButton>
-                        {/* </Link> */}
-                     </Form>
+                     </Link>
+                     {/* </Form> */}
                   </Box>
                </Box>
             </CardCover>

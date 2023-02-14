@@ -3,7 +3,7 @@ import CardMovie from './cardMovie';
 import { IconButton, Stack, Typography, Divider, Box } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 // import { Swiper, SwiperSlide } from 'swiper/react';
 // import 'swiper/css';
 // import 'swiper/css/free-mode';
@@ -12,6 +12,7 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 export default function UserListRow({ allMoviesOfUser, index }) {
    // console.log(allMoviesOfUser)
+   const [numberScroll, setNumberScroll] = useState(1);
    const listRef = useRef(null);
    const handleShowOn = async (idButton) => {
       const button = document.querySelectorAll(`.${idButton}`);
@@ -25,17 +26,23 @@ export default function UserListRow({ allMoviesOfUser, index }) {
       button.forEach((item) => (item.style.opacity = null));
    };
    const scroll = (id) => {
-      if (id === 'right') {
-         // console.log(listRef.current.scrollTo);
-         listRef.current.scrollTo({
-            left: listRef.current.clientWidth,
-            behavior: 'smooth',
-         });
-      } else if ((id = 'left')) {
-         listRef.current.scrollTo({
-            left: -listRef.current.clientWidth,
-            behavior: 'smooth',
-         });
+      if (numberScroll <= 3) {
+         let value = (listRef.current.scrollWidth / 4) * numberScroll;
+         if (id === 'right') {
+            // console.log(numberScroll);
+            setNumberScroll((e) => (e < 3 ? e + 1 : e));
+            listRef.current.scrollTo({
+               left: value,
+               behavior: 'smooth',
+            });
+         } else if ((id = 'left')) {
+            // console.log(numberScroll);
+            setNumberScroll(1);
+            listRef.current.scrollTo({
+               left: -listRef.current.scrollWidth,
+               behavior: 'smooth',
+            });
+         }
       }
    };
    return (

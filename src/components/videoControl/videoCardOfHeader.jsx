@@ -12,12 +12,22 @@ import { getDataMovie } from '../../app/apiService';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import Video from './video';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 export default function VideoCardOfHeader({ popular, ids }) {
    const [playing, setPlaying] = React.useState(false);
    const [index, setIndex] = React.useState(0);
    const [detailMovie, setDetailMovie] = React.useState(null);
    const [showVideo, setShowVideo] = React.useState(false);
    const [checkVolume, setCheckVolume] = React.useState(false);
+   let location = useLocation();
+   useEffect(() => {
+      if (location.pathname !== '/'){
+          setPlaying(false);
+          setShowVideo(false)
+         }
+   }, [location?.pathname]);
+
    React.useEffect(() => {
       const getDetailMovie = async () => {
          const dataMovie = await getDataMovie(ids[index]);

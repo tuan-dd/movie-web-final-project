@@ -4,12 +4,12 @@ import { Container } from '@mui/material';
 import MainHeader from './mainHeader';
 import { getGenres } from '../app/apiService';
 import DataMoviesProvider from '../contexts/dataMoviesProvider';
+import MainFooter from './mainFooter';
 export const loader = async () => {
    const genres = await getGenres('vi');
    return genres;
 };
 function MainLayout() {
-
    const genres = useLoaderData();
    return (
       <DataMoviesProvider>
@@ -22,6 +22,7 @@ function MainLayout() {
          >
             <MainHeader genres={genres} />
             <Outlet />
+            <MainFooter />
          </Container>
       </DataMoviesProvider>
    );

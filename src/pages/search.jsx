@@ -1,5 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { redirect, Outlet, useLoaderData } from 'react-router-dom';
+import {
+   redirect,
+   Outlet,
+   useLoaderData,
+} from 'react-router-dom';
 import { getOptionData, search } from '../app/apiService';
 import CardMovie from '../components/cardMovie';
 import LinearLoading from '../components/linearLoading';
@@ -22,7 +26,6 @@ export async function action(request, params) {
 }
 function Search() {
    const { dataSearch, q } = useLoaderData();
-   // console.log(dataSearch)
    const [movies, setMovies] = useState([]);
    const [page, setPage] = useState(2);
    const [progress, setProgress] = useState(10);
@@ -84,7 +87,7 @@ function Search() {
    }
 
    return (
-      <div>
+      <>
          {movies ? (
             <div>
                <Grid
@@ -121,7 +124,7 @@ function Search() {
                {/* <Outlet /> */}
             </Box>
          )}
-      </div>
+      </>
    );
 }
 

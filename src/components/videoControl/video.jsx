@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
 
-function Video({ keyMovie, playing, checkVolume, handlePlayVideo }) {
+function Video({ keyMovie, playing, checkVolume }) {
    return (
       <>
          <ReactPlayer
@@ -11,7 +11,6 @@ function Video({ keyMovie, playing, checkVolume, handlePlayVideo }) {
             playing={playing}
             controls={false}
             muted={checkVolume}
-            onReady={handlePlayVideo}
          />
       </>
    );

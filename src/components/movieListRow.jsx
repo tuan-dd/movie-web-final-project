@@ -3,11 +3,12 @@ import CardMovie from './cardMovie';
 import { IconButton, Stack, Typography, Divider, Box } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 export default function MovieListRow({ dataGenres, allMoviesOfGenre, index }) {
    // console.log(allMoviesOfGenre)
    const listRef = useRef(null);
+   const [numberScroll, setNumberScroll] = useState(1);
    const handleShowOn = async (idButton) => {
       const button = document.querySelectorAll(`.${idButton}`);
       button.forEach((item) => (item.style.opacity = 1));
@@ -20,19 +21,26 @@ export default function MovieListRow({ dataGenres, allMoviesOfGenre, index }) {
       button.forEach((item) => (item.style.opacity = null));
    };
    const scroll = (id) => {
-      console.log(listRef.current.scrollWidth);
-      console.log(listRef.current);
-      if (id === 'right') {
-         // console.log(listRef.current.scrollTo);
-         listRef.current.scrollTo({
-            left: listRef.current.scrollWidth,
-            behavior: 'smooth',
-         });
-      } else if ((id = 'left')) {
-         listRef.current.scrollTo({
-            left: -listRef.current.scrollWidth,
-            behavior: 'smooth',
-         });
+      // console.log(listRef.current.scrollWidth);
+      // console.log(listRef.current);
+      // console.log(listRef.current.scrollTo);
+      if (numberScroll <= 3) {
+         let value = (listRef.current.scrollWidth / 4) * numberScroll;
+         if (id === 'right') {
+            // console.log(numberScroll);
+            setNumberScroll((e) => (e < 3 ? e + 1 : e));
+            listRef.current.scrollTo({
+               left: value,
+               behavior: 'smooth',
+            });
+         } else if ((id = 'left')) {
+            // console.log(numberScroll);
+            setNumberScroll(1);
+            listRef.current.scrollTo({
+               left: -listRef.current.scrollWidth,
+               behavior: 'smooth',
+            });
+         }
       }
    };
    return (

@@ -1,9 +1,10 @@
 import { Box, Grid } from '@mui/material';
 import React, { useRef, useEffect, useState } from 'react';
-import { Outlet, useLoaderData } from 'react-router-dom';
+import { Outlet, useLoaderData, useNavigation } from 'react-router-dom';
 import { getOptionData } from '../app/apiService';
 import CardMovie from '../components/cardMovie';
 import LinearLoading from '../components/linearLoading';
+import LoadingScreen from '../components/loadingScreen';
 export async function loader({ params }) {
    const dataGenre = await getOptionData(
       '/discover',
@@ -25,7 +26,9 @@ function GenrePage() {
    const loadingRef = useRef(false);
    const progressLoading = useRef();
    const containerRef = useRef(0);
+   const navigation = useNavigation();
    // addEventListener for "scroll" event
+   console.log(navigation.state);
    useEffect(() => {
       window.addEventListener('scroll', onScroll);
 
@@ -33,6 +36,9 @@ function GenrePage() {
          window.removeEventListener('scroll', onScroll);
       };
    }, []);
+   useEffect(() => {
+      setMovies([...dataGenre.results]);
+   }, [dataGenre.results]);
 
    async function fetchPage() {
       setLoading(true);
@@ -52,7 +58,7 @@ function GenrePage() {
       );
       clearInterval(progressLoading.current);
       setProgress(100);
-       setTimeout(() => {
+      setTimeout(() => {
          setMovies((previousData) => [...previousData, ...newData.results]);
          setProgress(0);
       }, 1000);
@@ -75,28 +81,34 @@ function GenrePage() {
    }
 
    return (
-      <div>
-         <Grid
-            container
-            spacing={2}
-            mt={15}
-            pl={3}
-            sx={{
-               display: 'flex',
-            }}
-            ref={containerRef}
-         >
-            {movies.map((item, index) => (
-               <Grid item lg={2} md={3} sm={4} xs={12} key={index}>
-                  <CardMovie card={item} />
+      <>
+         {navigation.state === 'idle' ? (
+            <div>
+               <Grid
+                  container
+                  spacing={2}
+                  mt={15}
+                  pl={3}
+                  sx={{
+                     display: 'flex',
+                  }}
+                  ref={containerRef}
+               >
+                  {movies.map((item, index) => (
+                     <Grid item lg={2} md={3} sm={4} xs={12} key={index}>
+                        <CardMovie card={item} />
+                     </Grid>
+                  ))}
+                  <Outlet />
                </Grid>
-            ))}
-            <Outlet />
-         </Grid>
-         <Box p={2}>
-            <LinearLoading progress={progress} />
-         </Box>
-      </div>
+               <Box p={2}>
+                  <LinearLoading progress={progress} />
+               </Box>
+            </div>
+         ) : (
+            <LoadingScreen />
+         )}
+      </>
    );
 }
 
