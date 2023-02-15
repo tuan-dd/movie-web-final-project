@@ -77,7 +77,7 @@ const settings = ['Profile', 'Logout'];
 export default function MainHeader({ genres }) {
    const [anchorElNav, setAnchorElNav] = React.useState(null);
    const [anchorElUser, setAnchorElUser] = React.useState(null);
-   const [selectedIndex, setSelectedIndex] = React.useState(-1);
+   const [selectedIndex, setSelectedIndex] = React.useState(3);
    const navigate = useNavigate();
    const { logout } = useAuth();
    let location = useLocation();
@@ -132,7 +132,7 @@ export default function MainHeader({ genres }) {
          setSelectedIndex(0);
          // }
       } else {
-         setSelectedIndex(-1);
+         setSelectedIndex(false);
       }
    }, [location.pathname]);
 
@@ -199,16 +199,13 @@ export default function MainHeader({ genres }) {
                      sx={{ width: '120px', color: 'white' }}
                   >
                      <ListItemText
-                        color={(theme) => theme.palette.primary.contrastText}
                         component='Typography'
                         sx={{
                            '.css-6nwqjw-MuiTypography-root': {
                               color: 'white',
                            },
                         }}
-                        primary={
-                           selectedIndex !== -1 ? pages[selectedIndex] : 'Home'
-                        }
+                        primary={selectedIndex ? pages[selectedIndex] : 'Home'}
                      />
                   </ListItem>
                   <Menu

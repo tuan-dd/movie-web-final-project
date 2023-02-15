@@ -76,11 +76,11 @@ export default function BasicModal() {
                      width='100%'
                      height='100%'
                      playing={playing}
-                     controls={false}
+                     controls={true}
                      muted={checkVolume}
                      onReady={() => setPlaying(true)}
                   />
-                  <IconButton
+                  {/* <IconButton
                      onClick={() => {
                         setCheckVolume(!checkVolume);
                      }}
@@ -90,6 +90,7 @@ export default function BasicModal() {
                         bgcolor: 'white',
                         position: 'absolute',
                         bottom: 10,
+                        zIndex:12
                      }}
                   >
                      {!checkVolume ? (
@@ -97,7 +98,7 @@ export default function BasicModal() {
                      ) : (
                         <VolumeOffIcon sx={{ color: 'red' }} />
                      )}
-                  </IconButton>
+                  </IconButton> */}
                </Box>
                <BasicCard dataDetailMovie={dataDetailMovie} />
             </Container>

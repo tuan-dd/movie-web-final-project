@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, Typography, Box } from '@mui/material';
 import { useNavigation } from 'react-router-dom';
+import { VideoContext } from '../contexts/dataMoviesProvider';
 
 function MainFooter() {
-   const navigation = useNavigation();
+   // const navigation = useNavigation();
+   const { isLoading } = useContext(VideoContext);
    return (
       <>
-         {navigation.state === 'idle' && (
+         {!isLoading && (
             <Box bgcolor='pink'>
                <Typography
                   variant='body2'

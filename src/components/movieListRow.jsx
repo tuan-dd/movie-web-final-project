@@ -24,11 +24,11 @@ export default function MovieListRow({ dataGenres, allMoviesOfGenre, index }) {
       // console.log(listRef.current.scrollWidth);
       // console.log(listRef.current);
       // console.log(listRef.current.scrollTo);
-      if (numberScroll <= 3) {
+      if (numberScroll <= 4) {
          let value = (listRef.current.scrollWidth / 4) * numberScroll;
          if (id === 'right') {
             // console.log(numberScroll);
-            setNumberScroll((e) => (e < 3 ? e + 1 : e));
+            setNumberScroll((e) => (e < 4 ? e + 1 : e));
             listRef.current.scrollTo({
                left: value,
                behavior: 'smooth',
@@ -129,7 +129,7 @@ export default function MovieListRow({ dataGenres, allMoviesOfGenre, index }) {
                justifyContent: 'center',
                alignContent: 'center',
                top: '12px',
-               right: '0vw',
+               right: 2,
                height: '100%',
                width: 'auto',
                opacity: 0.2,
@@ -154,7 +154,7 @@ export default function MovieListRow({ dataGenres, allMoviesOfGenre, index }) {
                justifyContent: 'center',
                alignContent: 'center',
                top: '12px',
-               left: '3vw',
+               left: 50,
                zIndex: 15,
                height: '100%',
                width: 'auto',
