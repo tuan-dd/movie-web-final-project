@@ -24,11 +24,11 @@ const LoginSchema = Yup.object().shape({
       ),
 });
 
-// const defaultValues = {
-//    email: '',
-//    password: '',
-//    remember: false,
-// };
+const defaultValues = {
+   email: '',
+   password: '',
+   remember: false,
+};
 
 const style = {
    position: 'absolute',
@@ -49,11 +49,6 @@ function Login() {
    const auth = useAuth();
    const [showPassword, setShowPassword] = useState(false);
    const [forgottenPassword, setForgottenPassword] = useState(false);
-   const [defaultValues, setDefaultValues] = useState({
-      email: 'tuandd.310797@gmail.com',
-      password: 'Tuan310779',
-      remember: false,
-   });
    // console.log(defaultValues)
    const navigate = useNavigate();
    const location = useLocation();
@@ -66,28 +61,24 @@ function Login() {
       watch,
       handleSubmit,
       formState: { isSubmitting },
-      getValues,
+      setValue,
    } = methods;
-
+   const value = watch();
    const onSubmit = (data) => {
+      let convertBoolean = value.remember ? 'true' : 'false';
+      if (value.remember) {
+         window.localStorage.setItem('email', value.email);
+         window.localStorage.setItem('password', value.password);
+         window.localStorage.setItem('remember', convertBoolean);
+      }
       let from = location.state?.from?.pathname || '/';
       auth.login(data.email, data.password, () => {
          return navigate(from, { replace: true });
       });
    };
    const handleStoredUser = (e) => {
-      // const value = e.target.checked;
-      const data = watch();
-      setDefaultValues((previous) => ({
-         ...previous,
-         remember: data.remember,
-      }));
-      if (!data.remember) {
-         // console.log(data.remember)
-         window.localStorage.setItem('email', data.email);
-         window.localStorage.setItem('password', data.password);
-         window.localStorage.setItem('remember', e.target.checked);
-      } else {
+      console.log(value.remember);
+      if (value.remember) {
          window.localStorage.removeItem('email');
          window.localStorage.removeItem('password');
          window.localStorage.removeItem('remember');
@@ -97,15 +88,11 @@ function Login() {
       const email = window.localStorage.getItem('email');
       const password = window.localStorage.getItem('password');
       const remember = window.localStorage.getItem('remember');
-      getValues()
       if (remember) {
-         let object = {
-            email: email,
-            password: password,
-            remember: remember === 'true' ? true : false,
-         };
-         setDefaultValues((e) => ({ ...object }));
-         // getValues(object)
+         let convertBoolean = remember === 'true' ? true : false;
+         setValue('email', email, { shouldValidate: true });
+         setValue('password', password, { shouldValidate: true });
+         setValue('remember', convertBoolean, { shouldValidate: true });
       }
    }, []);
 
