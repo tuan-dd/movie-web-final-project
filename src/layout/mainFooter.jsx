@@ -9,7 +9,7 @@ function MainFooter() {
    return (
       <>
          {!isLoading && (
-            <Box bgcolor='pink'>
+            <Box bgcolor='pink' sx={{ position: 'absolute', width: '100%' }}>
                <Typography
                   variant='body2'
                   color={(theme) => theme.palette.primary.contrastText}
@@ -21,7 +21,6 @@ function MainFooter() {
                      Make by Anh Tuấn
                   </Link>{' '}
                   {new Date().getFullYear()}
-                  {'.'}
                </Typography>
             </Box>
          )}

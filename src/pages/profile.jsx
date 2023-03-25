@@ -2,20 +2,11 @@ import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import CardMovie from '../components/cardMovie';
-import LinearLoading from '../components/linearLoading';
-import UserListRow from '../components/userListRow';
+import StyleName from '../components/styleName';
 import useAuth from '../hooks/useAuth';
 
-const style = {
-   display: 'inline-flex',
-   color: '#A7DD3C',
-   m: 2,
-   cursor: 'pointer',
-   textShadow:
-      '2px 0 0px #800040, 3px 2px 0px rgba(77,0,38,0.5), 3px 0 3px #FF002B, 5px 0 3px #800015, 6px 2px 3px rgba(77,0,13,0.5), 6px 0 9px #FF5500, 8px 0 9px #802A00, 9px 2px 9px rgba(77,25,0,0.5), 9px 0 18px #FFD500, 11px 0 18px #806A00, 12px 2px 18px rgba(77,66,0,0.5), 12px 0 30px #D4FF00, 14px 0 30px #6A8000, 15px 2px 30px rgba(64,77,0,0.5), 15px 0 45px #80FF00, 17px 0 45px #408000, 17px 2px 45px rgba(38,77,0,0.5)',
-};
 function Profile() {
-   const { userFolder, logout, checkLogin, currentUser } = useAuth();
+   const { userFolder, logout, checkLogin, currentUser, verified } = useAuth();
    const navigate = useNavigate();
    const handChange = () => {
       if (checkLogin) {
@@ -39,9 +30,7 @@ function Profile() {
                backgroundImage: 'url(netflixteaser.png)',
             }}
          >
-            <Typography variant='h3' sx={style} onClick={()=> navigate('/')}>
-               Phim Hay
-            </Typography>
+            <StyleName variant='h3' />
             <Button
                sx={{
                   position: 'absolute',
@@ -84,7 +73,7 @@ function Profile() {
 
 export default Profile;
 
-const TypographyText = ({ checkLogin, handleCallback }) => {
+function TypographyText({ checkLogin, handleCallback }) {
    return (
       <Box>
          {checkLogin ? (
@@ -112,4 +101,4 @@ const TypographyText = ({ checkLogin, handleCallback }) => {
          )}
       </Box>
    );
-};
+}

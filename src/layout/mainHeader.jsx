@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { debounce } from 'lodash';
 import {
    useNavigate,
    Form,
@@ -14,7 +15,6 @@ import {
    Container,
    Avatar,
    Tooltip,
-   Button,
    MenuItem,
    Menu,
    InputBase,
@@ -28,6 +28,8 @@ import {
 } from '@mui/material';
 import useAuth from '../hooks/useAuth';
 import ScrollableTabsButtonAuto from '../components/scrollableTabsButtonAuto';
+import Logo from '../components/logo';
+import StyleName from '../components/styleName';
 
 const Search = styled('div')(({ theme }) => ({
    position: 'relative',
@@ -89,7 +91,6 @@ export default function MainHeader({ genres }) {
    const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
    };
-
    const handleCloseNavMenu = () => {
       setAnchorElNav(null);
    };
@@ -119,18 +120,23 @@ export default function MainHeader({ genres }) {
    };
 
    React.useEffect(() => {
-      document.getElementById('q').value = location.search.slice(3);
+      if (location.search.includes('&')) {
+         document.getElementById('q').value = location.search.slice(3);
+      }
    }, [location]);
+
+   const handleChange = debounce((event) => {
+      const isFirstSearch = location.search.slice(3) == null;
+      // console.log('run', 'event', event);
+
+      submit(event.target.form, {
+         replace: !isFirstSearch,
+      });
+   }, 800);
+
    React.useEffect(() => {
       if (location.pathname === '/tv-shows') {
-         // let indexOfPage = pages.findIndex(
-         //    (item) =>
-         //       item.trim().toLocaleLowerCase() == location.pathname.slice(1),
-         // );
-         // console.log(indexOfPage);
-         // if (indexOfPage > -1) {
          setSelectedIndex(0);
-         // }
       } else {
          setSelectedIndex(false);
       }
@@ -141,24 +147,18 @@ export default function MainHeader({ genres }) {
          <Container maxWidth='false'>
             <Toolbar disableGutters>
                {/* max width > 600px */}
-               <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-               <Typography
+               <Logo sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+               <StyleName
                   variant='h5'
-                  noWrap
-                  component={Link}
-                  to={'/'}
                   sx={{
-                     mr: 2,
+                     mr: 3,
                      display: { xs: 'none', md: 'flex' },
                      fontFamily: 'monospace',
                      fontWeight: 700,
-                     // letterSpacing: '.3rem',
                      color: 'inherit',
                      textDecoration: 'none',
                   }}
-               >
-                  Phim Hay
-               </Typography>
+               />
                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                   {pages.map((page, index) => (
                      <MenuItem
@@ -231,12 +231,9 @@ export default function MainHeader({ genres }) {
                      ))}
                   </Menu>
                </Box>
-               <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-               <Typography
+               <Logo sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+               <StyleName
                   variant='h5'
-                  noWrap
-                  component='a'
-                  href=''
                   sx={{
                      mr: 2,
                      display: { xs: 'flex', md: 'none' },
@@ -246,29 +243,20 @@ export default function MainHeader({ genres }) {
                      color: 'inherit',
                      textDecoration: 'none',
                   }}
-               >
-                  Phim Hay
-               </Typography>
+               />
 
-               {/* userMenu */}
                <Form role='search' method='get' action='/search'>
                   <Search>
                      <SearchIconWrapper>
                         <SearchIcon />
                      </SearchIconWrapper>
                      <StyledInputBase
+                        onChange={handleChange}
                         id='q'
                         name='q'
                         placeholder='Search…'
                         inputProps={{ 'aria-label': 'search' }}
                         defaultValue={location.search.slice(3)}
-                        onChange={(event) => {
-                           const isFirstSearch =
-                              location.search.slice(3) == null;
-                           submit(event.currentTarget.form, {
-                              replace: !isFirstSearch,
-                           });
-                        }}
                      />
                   </Search>
                </Form>

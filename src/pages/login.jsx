@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FCheckBox, FormProvider, FTextField } from '../components/form';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,17 +10,12 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab';
 import useAuth from '../hooks/useAuth';
 import LinkRoute from '../components/link';
+import { FCheckBox, FormProvider, FTextField } from '../components/form';
 import ResetPassword from './resetPassword';
 
-const passwordRegExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 const LoginSchema = Yup.object().shape({
    email: Yup.string().email('Must enter Email').required(),
-   password: Yup.string()
-      .required()
-      .matches(
-         passwordRegExp,
-         'Password contain at least one numeric digit, one uppercase and one lowercase letter',
-      ),
+   password: Yup.string().required(),
 });
 
 const defaultValues = {
@@ -49,7 +43,6 @@ function Login() {
    const auth = useAuth();
    const [showPassword, setShowPassword] = useState(false);
    const [forgottenPassword, setForgottenPassword] = useState(false);
-   // console.log(defaultValues)
    const navigate = useNavigate();
    const location = useLocation();
    const methods = useForm({
@@ -64,7 +57,8 @@ function Login() {
       setValue,
    } = methods;
    const value = watch();
-   const onSubmit = (data) => {
+
+   const onSubmit = async (data) => {
       let convertBoolean = value.remember ? 'true' : 'false';
       if (value.remember) {
          window.localStorage.setItem('email', value.email);
@@ -72,12 +66,14 @@ function Login() {
          window.localStorage.setItem('remember', convertBoolean);
       }
       let from = location.state?.from?.pathname || '/';
-      auth.login(data.email, data.password, () => {
+      await auth.login(data.email, data.password, () => {
+         //  console.log('run');
          return navigate(from, { replace: true });
       });
    };
-   const handleStoredUser = (e) => {
-      console.log(value.remember);
+
+   const handleStoredUser = () => {
+      // console.log(value.remember);
       if (value.remember) {
          window.localStorage.removeItem('email');
          window.localStorage.removeItem('password');
@@ -89,11 +85,11 @@ function Login() {
       const password = window.localStorage.getItem('password');
       const remember = window.localStorage.getItem('remember');
       if (remember) {
-         let convertBoolean = remember === 'true' ? true : false;
          setValue('email', email, { shouldValidate: true });
          setValue('password', password, { shouldValidate: true });
-         setValue('remember', convertBoolean, { shouldValidate: true });
+         setValue('remember', Boolean(remember), { shouldValidate: true });
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
    return (
@@ -110,9 +106,9 @@ function Login() {
                   <Stack spacing={3}>
                      {auth.errorMessage && (
                         <Alert severity='error'>
-                           The email address or password you entered isn't
-                           connected to an account.{' '}
-                           <Link to={'/signup'}> Create account.</Link>
+                           The email address or password you entered isn`t
+                           connected to an account.
+                           <Link to='/signup'> Create account.</Link>
                         </Alert>
                      )}
                      <FTextField name='email' label='Email' />
@@ -132,17 +128,13 @@ function Login() {
                                     {showPassword ? (
                                        <VisibilityOff
                                           sx={{
-                                             color: (theme) =>
-                                                theme.palette.primary
-                                                   .contrastText,
+                                             color: 'white',
                                           }}
                                        />
                                     ) : (
                                        <Visibility
                                           sx={{
-                                             color: (theme) =>
-                                                theme.palette.primary
-                                                   .contrastText,
+                                             color: 'white',
                                           }}
                                        />
                                     )}
@@ -156,7 +148,7 @@ function Login() {
                      <FCheckBox
                         name='remember'
                         label='Remember me'
-                        onClick={(e) => handleStoredUser(e)}
+                        onClick={handleStoredUser}
                      />
                   </Stack>
                   <LoadingButton
@@ -186,8 +178,8 @@ function Login() {
                   }}
                >
                   <LinkRoute
-                     value={'Sign up for PhimHay.com'}
-                     pathname={'/signUp'}
+                     value='Sign up for PhimHay.com'
+                     pathname='/signUp'
                   />
                   <Typography
                      onClick={() => setForgottenPassword((e) => !e)}

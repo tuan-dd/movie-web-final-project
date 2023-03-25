@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -8,43 +7,50 @@ import InfoIcon from '@mui/icons-material/Info';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Pagination from '@mui/material/Pagination';
 import { Button, CardMedia, IconButton, Stack } from '@mui/material';
-import { getDataMovie } from '../../app/apiService';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
-import Video from './video';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link as LinkRouter } from 'react-router-dom';
+import { getDataMovie } from '../../app/apiService';
+import Video from './video';
+
 export default function VideoCardOfHeader({ popular, ids }) {
    const [playing, setPlaying] = React.useState(false);
    const [index, setIndex] = React.useState(0);
-   const [detailMovie, setDetailMovie] = React.useState(null);
+   const [detailMovie, setDetailMovie] = React.useState([]);
    const [showVideo, setShowVideo] = React.useState(false);
    const [checkVolume, setCheckVolume] = React.useState(false);
    let location = useLocation();
    useEffect(() => {
-      if (location.pathname !== '/'){
-          setPlaying(false);
-          setShowVideo(false)
-         }
+      if (location.pathname !== '/') {
+         setPlaying(false);
+         setShowVideo(false);
+      }
    }, [location?.pathname]);
 
    React.useEffect(() => {
       const getDetailMovie = async () => {
-         const dataMovie = await getDataMovie(ids[index]);
-         const filter = {
-            ...dataMovie.data,
-            videos: dataMovie.data.videos.results,
-            videoTrailer: dataMovie.data.videos.results.find((item) =>
-               item.name === 'Official Trailer' ? item.name : '',
-            ),
-         };
-         setDetailMovie(filter);
+         try {
+            const dataMovie = await getDataMovie(ids[index]);
+            const filter = {
+               ...dataMovie.data,
+               videos: dataMovie.data.videos.results,
+               videoTrailer: dataMovie.data.videos.results.find((item) =>
+                  item.name === 'Official Trailer' ? item.name : '',
+               ),
+            };
+            setDetailMovie(filter);
+         } catch (error) {
+            setDetailMovie([]);
+         }
       };
       getDetailMovie();
-   }, [index]);
+   }, [index, ids]);
+
    const img = popular?.results.map(
       (item) => `https://image.tmdb.org/t/p/original${item.backdrop_path}`,
    );
+
    const handlePlayVideo = () => {
       setShowVideo(!showVideo);
       setPlaying((e) => !e);
@@ -95,6 +101,8 @@ export default function VideoCardOfHeader({ popular, ids }) {
                   Play
                </Button>
                <Button
+                  component={LinkRouter}
+                  to={`?movieId=${detailMovie.id}`}
                   sx={{ background: 'black', opacity: 1, color: 'white' }}
                   size='large'
                   startIcon={<InfoIcon sx={{ color: 'white' }} />}
@@ -163,7 +171,6 @@ export default function VideoCardOfHeader({ popular, ids }) {
                color='primary'
                onChange={(event, value) => {
                   setIndex(value - 1);
-                  console.log(value);
                   if (playing) {
                      setPlaying(!playing);
                      setShowVideo(!showVideo);

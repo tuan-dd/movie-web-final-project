@@ -1,29 +1,29 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 
 export default function ScrollableTabsButtonAuto({ data, handleNavigate }) {
-   // const name = data.map((item) => item.name);
-   const id = data.map((item) => item.id);
+   const ids = data.map((item) => item.id);
    const [value, setValue] = React.useState(false);
    const handleChange = (event, newValue) => {
       setValue(newValue);
-      handleNavigate(id[newValue]);
+      handleNavigate(ids[newValue]);
    };
    const params = useParams();
    React.useEffect(() => {
       if (params.genreId) {
-         // console.log(params.genreId);
-         let indexOfGenre = id.findIndex((item) => item == params.genreId);
+         let indexOfGenre = ids.findIndex(
+            (item) => item === parseInt(params.genreId, 10),
+         );
          if (indexOfGenre > -1) {
             setValue(indexOfGenre);
          }
-      }else{
-         setValue(false)
+      } else {
+         setValue(false);
       }
-      }, [params.genreId]);
+   }, [params.genreId, ids]);
+
    return (
       <Tabs
          value={value}

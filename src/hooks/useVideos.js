@@ -3,13 +3,14 @@ import { VideoContext } from '../contexts/dataMoviesProvider';
 
 function useVideos() {
    const { data, isLoading } = useContext(VideoContext);
-   const popular = data.popular;
-   const dataGenres = data.dataGenres;
-   const allMoviesOfGenres = data.allMoviesOfGenres;
+
+   const { popular } = data;
+   const { dataGenres } = data;
+   const { allMoviesOfGenres } = data;
    return {
-      dataGenres: dataGenres,
+      dataGenres,
       dataPopular: popular,
-      allMoviesOfGenres: allMoviesOfGenres,
+      allMoviesOfGenres,
    };
 }
 

@@ -1,42 +1,52 @@
 import * as React from 'react';
-import CardMovie from './cardMovie';
 import { IconButton, Stack, Typography, Divider, Box } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useRef, useState } from 'react';
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import 'swiper/css';
-// import 'swiper/css/free-mode';
-// import 'swiper/css/navigation';
-// import { FreeMode, Navigation } from 'swiper';
 import { Link } from 'react-router-dom';
+import CardMovie from './cardMovie';
+
+const styleArrow = {
+   position: 'absolute',
+   display: 'flex',
+   zIndex: 15,
+   justifyContent: 'center',
+   alignContent: 'center',
+   height: '100%',
+   width: 'auto',
+   opacity: 0.2,
+   ':hover': {
+      opacity: 1,
+   },
+};
 export default function UserListRow({ allMoviesOfUser, index }) {
-   // console.log(allMoviesOfUser)
    const [numberScroll, setNumberScroll] = useState(1);
    const listRef = useRef(null);
+
    const handleShowOn = async (idButton) => {
       const button = document.querySelectorAll(`.${idButton}`);
       button.forEach((item) => (item.style.opacity = 1));
+
       setTimeout(() => {
          button.forEach((item) => (item.style.opacity = null));
       }, 1500);
    };
+
    const handleShowOff = (idButton) => {
       const button = document.querySelectorAll(`.${idButton}`);
       button.forEach((item) => (item.style.opacity = null));
    };
+
    const scroll = (id) => {
       if (numberScroll <= 3) {
          let value = (listRef.current.scrollWidth / 4) * numberScroll;
          if (id === 'right') {
-            // console.log(numberScroll);
             setNumberScroll((e) => (e < 3 ? e + 1 : e));
             listRef.current.scrollTo({
                left: value,
                behavior: 'smooth',
             });
-         } else if ((id = 'left')) {
-            // console.log(numberScroll);
+         } else if (id === 'left') {
             setNumberScroll(1);
             listRef.current.scrollTo({
                left: -listRef.current.scrollWidth,
@@ -55,7 +65,7 @@ export default function UserListRow({ allMoviesOfUser, index }) {
             position='relative'
          >
             My Folder
-            <Link to={`folder`}>
+            <Link to='/folder'>
                <Typography
                   variant='caption'
                   textAlign='end'
@@ -101,43 +111,13 @@ export default function UserListRow({ allMoviesOfUser, index }) {
                />
             ))}
          </Stack>
-         {/* <Swiper
-            slidesPerView={7}
-            spaceBetween={6}
-            freeMode={true}
-            navigation={true}
-            modules={[FreeMode, Navigation]}
-            className='mySwiper'
-            style={{ paddingLeft: '40px' }}
-         >
-            {allMoviesOfGenre.results?.map((card, i) => (
-               <SwiperSlide key={i}>
-                  <VideoCard
-                     card={card}
-                     handleShowOn={handleShowOn}
-                     handleShowOff={handleShowOff}
-                     idButton={`button_${index}`}
-                  />
-               </SwiperSlide>
-            ))}
-         </Swiper> */}
          <IconButton
             className={`button_${index}`}
             onClick={() => scroll('right')}
             sx={{
-               position: 'absolute',
-               display: 'flex',
-               zIndex: 15,
-               justifyContent: 'center',
-               alignContent: 'center',
+               ...styleArrow,
                top: '12px',
                right: '0vw',
-               height: '100%',
-               width: 'auto',
-               opacity: 0.2,
-               ':hover': {
-                  opacity: 1,
-               },
             }}
          >
             <ArrowForwardIosIcon
@@ -151,19 +131,9 @@ export default function UserListRow({ allMoviesOfUser, index }) {
             className={`button_${index}`}
             onClick={() => scroll('left')}
             sx={{
-               position: 'absolute',
-               display: 'flex',
-               justifyContent: 'center',
-               alignContent: 'center',
+               ...styleArrow,
                top: '12px',
                left: '3vw',
-               zIndex: 15,
-               height: '100%',
-               width: 'auto',
-               opacity: 0.2,
-               ':hover': {
-                  opacity: 1,
-               },
             }}
          >
             <ArrowBackIosIcon

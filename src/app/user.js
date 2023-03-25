@@ -55,16 +55,18 @@
 
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from "firebase/firestore";
+import { getFirestore } from 'firebase/firestore';
+
 const firebaseApp = initializeApp({
-   apiKey: "AIzaSyCAqXO2pzpoUIbiMyJi_kzHdqaLZbIXhgs",
-  authDomain: "web-flim-fe.firebaseapp.com",
-  databaseURL: "https://web-flim-fe-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "web-flim-fe",
-  storageBucket: "web-flim-fe.appspot.com",
-  messagingSenderId: "533318496628",
-  appId: "1:533318496628:web:9a3ab74437e3932857fc21",
-  measurementId: "G-KWB6R2ZDJ5"
+   apiKey: 'AIzaSyCAqXO2pzpoUIbiMyJi_kzHdqaLZbIXhgs',
+   authDomain: 'web-flim-fe.firebaseapp.com',
+   databaseURL:
+      'https://web-flim-fe-default-rtdb.asia-southeast1.firebasedatabase.app',
+   projectId: 'web-flim-fe',
+   storageBucket: 'web-flim-fe.appspot.com',
+   messagingSenderId: '533318496628',
+   appId: '1:533318496628:web:9a3ab74437e3932857fc21',
+   measurementId: 'G-KWB6R2ZDJ5',
 });
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore(firebaseApp);

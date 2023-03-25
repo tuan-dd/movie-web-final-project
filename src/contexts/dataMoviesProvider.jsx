@@ -1,48 +1,37 @@
-import React, {
-   Children,
-   createContext,
-   useMemo,
-   useState,
-   useEffect,
-} from 'react';
-import { getDataMovie, getGenres, getOptionData } from '../app/apiService';
-import useAuth from '../hooks/useAuth';
-import { db } from '../app/user';
-import { doc, getDoc } from 'firebase/firestore';
+import React, { createContext, useState, useEffect } from 'react';
+import { getGenres, getOptionData } from '../app/apiService';
 
 export const VideoContext = createContext();
 
-function dataMoviesProvider({ children }) {
+function DataMoviesProvider({ children }) {
    const [data, setData] = useState({});
-   const [isLoading, setIsLoading] = useState(true); //
-   const { currentUser } = useAuth();
-   // const user = doc(db, 'user', `${currentUser?.email}`);
+   const [isLoading, setIsLoading] = useState(true);
+
    async function getData() {
       try {
-         const getData = await Promise.all([
+         const allData = await Promise.allSettled([
             getOptionData('/movie', '/popular'),
             getGenres(),
-         ]).then((value) => value);
-         const allMoviesOfGenres = await Promise.all(
-            getData[1].map(async (genre) => {
-               let id = genre.id;
-               return await getOptionData(
+         ]);
+         const genres = allData[1].value;
+
+         const allMoviesOfGenres = await Promise.allSettled(
+            genres.map(async (genre) => {
+               let { id } = genre;
+               const result = await getOptionData(
                   '/discover',
                   '/movie',
                   '',
                   1,
                   `&sort_by=popularity.desc&with_genres=${id}`,
                );
+               return result;
             }),
          );
-
-         // const data = await getDoc(user);
-         // const dataObject = data.data();
-         // console.log(dataObject.savedShows);
          setData({
-            popular: getData[0],
-            dataGenres: getData[1],
-            allMoviesOfGenres: allMoviesOfGenres,
+            popular: allData[0].value,
+            dataGenres: allData[1].value,
+            allMoviesOfGenres,
          });
       } finally {
          setIsLoading(false);
@@ -51,9 +40,7 @@ function dataMoviesProvider({ children }) {
       // console.log(allMoviesOfGenres);
    }
 
-   // useMemo là không đúng => chuyển thành useEffect
    useEffect(() => {
-      // console.log('run')
       getData();
    }, []);
 
@@ -64,4 +51,4 @@ function dataMoviesProvider({ children }) {
    );
 }
 
-export default dataMoviesProvider;
+export default DataMoviesProvider;

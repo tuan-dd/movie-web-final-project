@@ -5,7 +5,7 @@ function Video({ keyMovie, playing, checkVolume }) {
    return (
       <>
          <ReactPlayer
-            url={`https://www.youtube.com/watch?v=${keyMovie}`}
+            url={`https://www.youtube.com/watch?v=${keyMovie}origin=http://localhost:5173`}
             width='100%'
             height='100%'
             playing={playing}

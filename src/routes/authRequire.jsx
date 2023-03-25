@@ -11,7 +11,6 @@ function AuthRequire({ children }) {
    if (!authorize) {
       return <Navigate to='/login' state={{ from: location }} replace />;
    }
-
    return children;
 }
 

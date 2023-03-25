@@ -1,5 +1,4 @@
 import { createContext, useReducer, useEffect, useMemo } from 'react';
-import { auth, db } from '../app/user';
 import {
    sendPasswordResetEmail,
    createUserWithEmailAndPassword,
@@ -11,6 +10,8 @@ import {
    onAuthStateChanged,
 } from 'firebase/auth';
 import { arrayUnion, doc, updateDoc, getDoc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../app/user';
+
 const initialState = {
    checkLogin: false,
    currentUser: null,
@@ -117,11 +118,10 @@ function AuthProvider({ children }) {
          console.log(error);
       }
    };
-   const navigateHome = (callBack) => {
+   const navigateHome = () => {
       dispatch({
          type: NAVIGATE_HOME,
       });
-      callBack();
    };
    const logout = () => {
       signOut(auth);
@@ -148,12 +148,13 @@ function AuthProvider({ children }) {
             error: error.message,
          });
          console.log(error.code);
+         return false;
       }
    };
 
    const changePass = async (newPass) => {
       try {
-         await updatePassword(currentUser, newPass);
+         await updatePassword(auth.currentUser, newPass);
          return true;
       } catch (error) {
          dispatch({
@@ -161,12 +162,13 @@ function AuthProvider({ children }) {
             error: error.message,
          });
          console.log(error);
+         return false;
       }
    };
 
    const changeEmail = async (newEmail) => {
       try {
-         await updateEmail(currentUser, newEmail);
+         await updateEmail(auth.currentUser, newEmail);
          return true;
       } catch (error) {
          dispatch({
@@ -174,6 +176,7 @@ function AuthProvider({ children }) {
             error: error.message,
          });
          console.log(error);
+         return false;
       }
    };
    const resetPass = async (email) => {
@@ -189,6 +192,7 @@ function AuthProvider({ children }) {
             error: error.message,
          });
          console.log(error);
+         return false;
       }
    };
 
@@ -204,6 +208,7 @@ function AuthProvider({ children }) {
          console.log(error.code);
       }
    };
+
    const handleUpdateFolderUser = async (card) => {
       const dataUser = doc(db, 'user', `${state.currentUser.email}`);
       await updateDoc(dataUser, {

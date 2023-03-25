@@ -10,15 +10,12 @@ import Visibility from '@mui/icons-material/Visibility';
 import CreateNewFolder from '@mui/icons-material/CreateNewFolder';
 import Info from '@mui/icons-material/Info';
 import {
-   useNavigate,
-   Link,
+   Link as LinkRouter,
    useLocation,
-   Form,
-   useSubmit,
+   useSearchParams,
 } from 'react-router-dom';
-// import { arrayUnion, doc, updateDoc, getDoc } from 'firebase/firestore';
-// import { db } from '../app/user';
 import useAuth from '../hooks/useAuth';
+import Notification from './modal/alert';
 
 export default function CardMovie({
    card,
@@ -27,6 +24,11 @@ export default function CardMovie({
    idButton,
 }) {
    const [addUserFolder, setAddUserFolder] = React.useState(false);
+   const [isAlertShow, setIsAlertShow] = React.useState({
+      value: false,
+      isLogin: false,
+   });
+
    const location = useLocation();
    let img = card.poster_path ? card.poster_path : card.backdrop_path;
    const {
@@ -38,11 +40,16 @@ export default function CardMovie({
    } = useAuth();
    const handleUpdate = async () => {
       if (!checkLogin && !currentUser?.emailVerified) {
-         alert('you must login to save your movie');
+         //  alert('you must login to save your movie');
+         setIsAlertShow({
+            value: true,
+            isLogin: true,
+         });
       } else if (!currentUser?.emailVerified) {
-         alert(
-            'you must verifier to save your movie, go to Profile to verifier ',
-         );
+         setIsAlertShow({
+            value: true,
+            isLogin: false,
+         });
       }
       if (currentUser?.emailVerified) {
          setAddUserFolder((e) => !e);
@@ -58,8 +65,22 @@ export default function CardMovie({
       const cardsId = userFolder.map((item) => item.id);
       const result = cardsId.includes(card.id);
       setAddUserFolder(result);
-   }, [userFolder]);
-   let submit = useSubmit();
+   }, [userFolder, card.id]);
+
+   const [searchParams, setSearchParams] = useSearchParams();
+
+   const q = searchParams.get('q');
+   let searchParamsQuery;
+
+   if (q) {
+      searchParams.set('movieId', card.id);
+      searchParamsQuery = [...searchParams.entries()]
+         .map((i) => i.join('='))
+         .join('&');
+   } else {
+      searchParamsQuery = `movieId=${card.id}`;
+   }
+
    return (
       <Card
          sx={{
@@ -68,12 +89,8 @@ export default function CardMovie({
             '--Card-padding': '0px',
             position: 'relative',
          }}
-         onMouseOver={() => {
-            handleShowOn && handleShowOn(idButton);
-         }}
-         onMouseOut={() => {
-            handleShowOff && handleShowOff(idButton);
-         }}
+         onMouseOver={() => handleShowOn && handleShowOn(idButton)}
+         onMouseOut={() => handleShowOff && handleShowOff(idButton)}
       >
          <Box
             sx={{
@@ -131,28 +148,18 @@ export default function CardMovie({
                      >
                         <CreateNewFolder />
                      </IconButton>
-                     {/* <Form
-                        role='search'
-                        method='put'
-                        action='/'
-                        onClick={(event) => {
-                           submit(event.currentTarget.form);
-                        }} */}
-                     <Link
-                        to={`detail/${card.id}`}
+                     <LinkRouter
+                        to={`?${searchParamsQuery}`}
                         state={{ callBack: location }}
                      >
                         <IconButton
                            size='sm'
                            color='neutral'
-                           // type='submit'
-                           // name='detail'
                            defaultValue={`${card.id}`}
                         >
                            <Info />
                         </IconButton>
-                     </Link>
-                     {/* </Form> */}
+                     </LinkRouter>
                   </Box>
                </Box>
             </CardCover>
@@ -192,6 +199,10 @@ export default function CardMovie({
                {Math.floor(card.popularity)}00
             </Typography>
          </Box>
+         <Notification
+            isAlertShow={isAlertShow}
+            setIsAlertShow={setIsAlertShow}
+         />
       </Card>
    );
 }

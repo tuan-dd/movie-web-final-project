@@ -1,9 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const bull = (
@@ -15,46 +13,49 @@ const bull = (
    </Box>
 );
 export default function BasicCard({ dataDetailMovie }) {
+   //  console.log(dataDetailMovie);
+   let img = dataDetailMovie.poster_path
+      ? dataDetailMovie.poster_path
+      : dataDetailMovie.backdrop_path;
    return (
-      <Card>
+      <Box
+         sx={{
+            // backgroundColor: 'black',
+            color: 'white',
+            width: '100%',
+            height: 500,
+            pd: 2,
+            backgroundImage: `url(https://image.tmdb.org/t/p/original/${img})`,
+            backgroundSize: '100% 100%',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+         }}
+      >
          <CardContent>
+            <Typography variant='h6' color='secondary.contrastText'>
+               {dataDetailMovie.production_countries[0]?.name}
+            </Typography>
             <Typography
                sx={{ fontSize: 14 }}
-               color='text.secondary'
+               color='secondary.contrastText'
                gutterBottom
             >
                Views :{Math.floor(dataDetailMovie.popularity)}00
+               {new Date(dataDetailMovie.release_date).getFullYear()}
+               {bull}Vietsub{bull}IMBD:{dataDetailMovie.vote_average.toFixed(1)}
             </Typography>
-            <Typography variant='h6' component='div'>
-               {dataDetailMovie.production_countries[0].name}
-               {bull}
-               {dataDetailMovie.release_date}
-               {bull}Vietsub
+            <Typography component='p' color='secondary.contrastText'>
+               {dataDetailMovie.genres
+                  .map((item) => item.name)
+                  .join(',')
+                  .replace(/,/g, ' • ')}
+               <br />
             </Typography>
-            <Box display='flex' height='100%'>
-               <Typography
-                  component={'p'}
-                  color='text.secondary'
-                  width='70%'
-                  p={1}
-               >
-                  {dataDetailMovie.overview}
-               </Typography>
-               <Typography
-                  component={'p'}
-                  width='30%'
-                  p={1}
-                  color='text.secondary'
-               >
-                  Genres:
-                  {dataDetailMovie.genres
-                     .map((item) => item.name)
-                     .toString()}{' '}
-                  <br />
-                  IMBD:{dataDetailMovie.vote_average.toFixed(1)}
-               </Typography>
-            </Box>
+
+            <Typography component='p' color='secondary.contrastText'>
+               {dataDetailMovie.overview}
+            </Typography>
          </CardContent>
-      </Card>
+      </Box>
    );
 }

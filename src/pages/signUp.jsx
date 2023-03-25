@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { FCheckBox, FormProvider, FTextField } from '../components/form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate, Link } from 'react-router-dom';
@@ -16,8 +15,10 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab';
+import { FCheckBox, FormProvider, FTextField } from '../components/form';
 import useAuth from '../hooks/useAuth';
 import FCheckbox from '../components/form/fCheckBox';
+
 const passwordRegExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 const signUpSchema = Yup.object().shape({
    username: Yup.string().email('Must enter email').required(),
@@ -76,8 +77,8 @@ function SignUp() {
 
    const onSubmit = async (data) => {
       // console.log(auth);
-      const register_success = await createUser(data.username, data.password);
-      if (register_success) {
+      const registerSuccess = await createUser(data.username, data.password);
+      if (registerSuccess) {
          setGetVerified((e) => !e);
       }
    };
