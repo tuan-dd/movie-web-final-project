@@ -153,9 +153,8 @@ export default function MainHeader({ genres }) {
                   sx={{
                      mr: 3,
                      display: { xs: 'none', md: 'flex' },
-                     fontFamily: 'monospace',
                      fontWeight: 700,
-                     color: 'inherit',
+                     color: '#ffd830',
                      textDecoration: 'none',
                   }}
                />
@@ -238,9 +237,8 @@ export default function MainHeader({ genres }) {
                      mr: 2,
                      display: { xs: 'flex', md: 'none' },
                      flexGrow: 1,
-                     fontFamily: 'monospace',
                      fontWeight: 700,
-                     color: 'inherit',
+                     color: '#ffd830',
                      textDecoration: 'none',
                   }}
                />

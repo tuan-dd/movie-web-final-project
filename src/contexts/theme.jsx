@@ -6,10 +6,12 @@ import {
 } from '@mui/material/styles';
 import { extendTheme as extendJoyTheme } from '@mui/joy/styles';
 
+import UseFuturistic from '../fonts/ZilapOrionPersonalUseFuturistic-DzA3.ttf';
+
 const PRIMARY = {
    lighter: '#FFD07F',
    light: '#FDA65D',
-   main: '#FF8243',
+   main: '#ffd830',
    dark: '#E26A2C',
    darker: '#cc571f',
    contrastText: '#FFF',

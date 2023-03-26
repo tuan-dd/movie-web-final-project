@@ -1,7 +1,8 @@
-import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import React from 'react';
+import { Box, Button, Container, Grid, Typography, Stack } from '@mui/material';
 import { useNavigate, Outlet } from 'react-router-dom';
 import CardMovie from '../components/cardMovie';
+import Logo from '../components/logo';
 import StyleName from '../components/styleName';
 import useAuth from '../hooks/useAuth';
 
@@ -30,7 +31,12 @@ function Profile() {
                backgroundImage: 'url(netflixteaser.png)',
             }}
          >
-            <StyleName variant='h3' />
+            <Stack flexDirection='row' alignItems='center' spacing={3} pl={2}>
+               <Logo sx={{ height: 100, width: 100 }} />
+               <Button variant='text'>
+                  <StyleName />
+               </Button>
+            </Stack>
             <Button
                sx={{
                   position: 'absolute',
@@ -48,8 +54,8 @@ function Profile() {
             <Grid
                container
                spacing={2}
-               mt={5}
-               pl={3}
+               mt={2}
+               p={3}
                sx={{
                   display: 'flex',
                }}
