@@ -80,6 +80,7 @@ export default function MovieListRow({ dataGenres, allMoviesOfGenre, index }) {
             divider={<Divider orientation='vertical' flexItem width='1px' />}
             spacing={1}
             style={{
+               paddingTop: '30px',
                // width: 'max-content',
                height: 'auto',
                overflowX: 'hidden',
