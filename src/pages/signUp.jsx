@@ -46,7 +46,7 @@ const styleSignUp = {
    left: '50%',
    transform: 'translate(-50%, -50%)',
    width: 400,
-   height: 450,
+   height: 'auto',
    backgroundColor: 'black',
    border: '2px solid #000',
    boxShadow: 24,
@@ -178,6 +178,7 @@ function SignUp() {
                   sx={{
                      display: 'flex',
                      m: '0 auto',
+                     mt: 3,
                   }}
                >
                   Sign Up
